@@ -1,21 +1,21 @@
-
 import pygame
 import os
-# TODO: random 라이브러리 불러오기
+import random
 
 pygame.init()
 
+# 전역 변수
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 
 START_X = 80
 START_Y = 310
+DUCK_Y = 340
 JUMP_VEL = 8.5
 
-# 게임을 보여줄 스크린
+# 게임 이미지
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# 공룡, 선인장, 배경 이미지
 RUNNING = [pygame.image.load(os.path.join("Assets/Dino", "DinoRun1.png")),
            pygame.image.load(os.path.join("Assets/Dino", "DinoRun2.png"))]
 
@@ -32,61 +32,30 @@ BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
 class Dinosaur:
 
     def __init__(self):
-        # TODO: 필요한 속성 추가하기
-        self.image_run = RUNNING
-        self.image_jump = JUMPING
-        self.image = self.image_run[0]
-        self.step = 0
-
-        self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = START_X
-        self.dino_rect.y = START_Y
+        print("initialize Dinosaur")
 
     def update(self, userInput):
-        # TODO: 1. run(), jump() 실행하기
-        # TODO: 2. ↑ 버튼을 누를 때마다 점프하기
-
-        if self.step >= 10:
-            self.step = 0
+        print("update Dinosaur")
 
     def run(self):
-        self.image = self.image_run[self.step // 5]
-        self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = self.pos_x
-        self.dino_rect.y = self.pos_y
-        self.step += 1
+        print("run Dinosaur")
 
     def jump(self):
-        self.image = self.image_jump
-
-        if self.is_jumping:
-            self.dino_rect.y -= self.jump_vel * 4
-            self.jump_vel -= 0.8
-
-        if self.jump_vel < - JUMP_VEL:
-            self.is_jumping = False
-            self.jump_vel = JUMP_VEL
+        print("jump Dinosaur")
 
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
+        print("draw Dinosaur")
 
-
+# 선인장 클래스
 class SmallCactus:
     def __init__(self, image):
-        self.image = image
-        self.type = 0          # TODO: type 값을 바꿔 랜덤으로 선인장이 나오도록 만들기
-        self.rect = self.image[self.type].get_rect()
-        self.rect.x = SCREEN_WIDTH
-        self.rect.y = 325
+        print("initialize SmallCactus")
 
     def update(self):
-        self.rect.x -= game_speed
-        if self.rect.x < -self.rect.width:
-            obstacles.pop()
+        print("update SmallCactus")
 
     def draw(self, SCREEN):
-        # TODO: 화면에 선인장 그리기
-        print("SmallCactus draw!")
+        print("draw SmallCactus")
 
 
 def main():
@@ -102,18 +71,19 @@ def main():
     obstacles = []
     run = True
 
-    # TODO: Dinosaur 클래스 변수 만들기
-
+    # 점수를 계산하는 함수
     def score():
         global points, game_speed
-        # TODO: 게임 점수 증가시키기
-        # TODO: 게임 점수가 100 늘어날 때마다 게임 속도 증가시키기
+        points += 1
+        if points % 100 == 0:
+            game_speed += 1
 
         text = font.render("Points: " + str(points), True, (0, 0, 0))
         textRect = text.get_rect()
         textRect.center = (1000, 40)
         SCREEN.blit(text, textRect)
 
+    # 배경화면을 그리는 함수
     def background():
         global x_pos_bg, y_pos_bg
         image_width = BG.get_width()
@@ -124,6 +94,7 @@ def main():
             x_pos_bg = 0
         x_pos_bg -= game_speed
 
+
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -131,29 +102,14 @@ def main():
 
         SCREEN.fill((255, 255, 255))
 
-        # TODO: 화면에 공룡 그리기
-        # TODO: 플레이어에게 ↑ 입력받기
-        # TODO: 공룡 이미지 바꾸기
-
-        if len(obstacles) == 0:
-            obstacles.append(SmallCactus(SMALL_CACTUS))
-
-        for obstacle in obstacles:
-            obstacle.draw(SCREEN)
-            obstacle.update()
-
-            # TODO: 공룡이 선인장과 충돌하면 게임 종료
-
-
-        background()
-
-        score()
+        # TODO: 게임 기능 구현하기
 
         clock.tick(30)
 
         pygame.display.update()
 
 
+# 메뉴를 보여주는 함수
 def menu(isAlive):
     global points
     run = True
